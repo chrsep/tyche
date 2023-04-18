@@ -1,7 +1,20 @@
-import { getCsrfToken } from "next-auth/react"
+"use client"
+import { signIn } from "next-auth/react"
+import { useState } from "react"
 
-export default async function SignIn() {
-  const csrfToken = await getCsrfToken()
+export default function SignIn() {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSignIn = async () => {
+    await signIn("credentials", {
+      callbackUrl: "/dashboard",
+      redirect: true,
+      username,
+      password,
+    })
+  }
+
   return (
     <>
       <div className="flex min-h-full">
@@ -30,14 +43,12 @@ export default async function SignIn() {
             <div className="mt-8">
               <div className="mt-6">
                 <form
-                  action={
-                    process.env.NEXTAUTH_URL + "/api/auth/callback/credentials"
-                  }
-                  method="POST"
                   className="space-y-6"
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    await handleSignIn()
+                  }}
                 >
-                  <input type="hidden" name="csrfToken" value={csrfToken} />
-
                   <div>
                     <label
                       htmlFor="username"
@@ -53,6 +64,8 @@ export default async function SignIn() {
                         autoComplete="email"
                         required
                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                       />
                     </div>
                   </div>
@@ -72,6 +85,8 @@ export default async function SignIn() {
                         autoComplete="current-password"
                         required
                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                     </div>
                   </div>
