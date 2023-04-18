@@ -24,7 +24,7 @@ export default async function Home() {
   const message = await welcomeMessage()
 
   return (
-    <div>
+    <div className={"prose p-8"}>
       <h1 className={"bg-gray-50 text-red-700"} >Home</h1>
       <p>{message}</p>
     </div>
