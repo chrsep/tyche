@@ -21,7 +21,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "$styles/*": [
+        "./styles/*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",
