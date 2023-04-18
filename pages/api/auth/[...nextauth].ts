@@ -15,6 +15,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        console.log(process.env.NEXTAUTH_URL);
         // Add logic here to look up the user from the credentials supplied
         const user = {
           id: "anderson",

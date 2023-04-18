@@ -4,7 +4,6 @@ import { generateChatCompletion } from "$lib/openai"
 
 async function welcomeMessage() {
   const session = await getServerSession(authOptions)
-  console.log(process.env.NEXTAUTH_URL);
 
   try {
     const choices = await generateChatCompletion([
