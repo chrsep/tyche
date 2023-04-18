@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { saveUser } from "$lib/user"
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -22,10 +23,8 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        console.log(process.env.NEXTAUTH_URL)
         // Add logic here to look up the user from the credentials supplied
         const user = {
-          id: "anderson",
           name: "anderson",
           email: process.env.AUTH_EMAIL,
           password: process.env.AUTH_PASSWORD,
@@ -36,9 +35,11 @@ export const authOptions: AuthOptions = {
           user.password === credentials?.password
         ) {
           // Any object returned will be saved in `user` property of the JWT
+          const result = await saveUser(user.email || "", user.name || "")
           return {
-            id: user.id,
-            name: user.name,
+            id: result.id,
+            email: result.email,
+            name: result.name,
           }
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
