@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "src/prisma generate && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "dotenv -e .env.local src/prisma"
+    "prisma": "dotenv -e .env.local prisma"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.315.0",
