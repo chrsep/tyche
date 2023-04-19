@@ -28,7 +28,16 @@ export async function saveInsuranceFile(
       type: type,
       name: name,
       objectKey: `insurance/${userId}/${randomUUID()}`,
+      content: "",
     },
+  })
+}
+
+export async function updateInsuranceFileContent(id: string, content: string) {
+  await prisma.$connect()
+  await prisma.insuranceFile.update({
+    where: { id },
+    data: { content },
   })
 }
 
@@ -50,12 +59,17 @@ export async function findInsuranceFile(id: string) {
 
 export async function loadInsuranceFile(metadata: InsuranceFile) {
   const file = await getFile(metadata.objectKey)
+  if (metadata.content) {
+    return metadata.content
+  }
 
   const byteStream = await file.Body?.transformToByteArray()
   if (!byteStream) {
     throw new Error("No file found")
   }
   const result = await pdf(Buffer.from(byteStream))
+
+  await updateInsuranceFileContent(metadata.id, result.text)
 
   return result.text
 }
