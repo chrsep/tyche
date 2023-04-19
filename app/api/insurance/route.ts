@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "$pages/api/auth/[...nextauth]"
-import { findInsurancFilee } from "$lib/insurance"
+import { findInsuranceFile } from "$lib/insurance"
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.redirect("/auth/login")
   }
 
-  const insuranceFiles = await findInsurancFilee(session.user.email)
+  const insuranceFiles = await findInsuranceFile(session.user.email)
 
   return NextResponse.json(insuranceFiles ?? [])
 }

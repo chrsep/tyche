@@ -1,13 +1,15 @@
-import prisma from "$lib/prisma";
-import { randomUUID } from "crypto";
+import prisma from "$lib/prisma"
+import { randomUUID } from "crypto"
 
-export async function findInsurancFilee(userId: string) {
-  await prisma.$connect();
+export async function findInsuranceFiles(email: string) {
+  await prisma.$connect()
   return prisma.insuranceFile.findMany({
     where: {
-      userId: userId
-    }
-  });
+      user: {
+        email: email,
+      },
+    },
+  })
 }
 
 export async function saveInsuranceFile(
@@ -15,13 +17,22 @@ export async function saveInsuranceFile(
   type: string,
   name: string
 ) {
-  await prisma.$connect();
+  await prisma.$connect()
   return prisma.insuranceFile.create({
     data: {
       userId: userId,
       type: type,
       name: name,
-      objectKey: `insurance/${userId}/${randomUUID()}`
-    }
+      objectKey: `insurance/${userId}/${randomUUID()}`,
+    },
+  })
+}
+
+export async function deleteInsuranceFile(id: string) {
+  await prisma.$connect()
+  return prisma.insuranceFile.delete({
+    where: {
+      id: id,
+    },
   })
 }
