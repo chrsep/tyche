@@ -14,14 +14,17 @@
     "@aws-sdk/s3-request-presigner": "^3.315.0",
     "@aws-sdk/signature-v4-crt": "^3.310.0",
     "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
     "@prisma/client": "4.13.0",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.9",
     "@types/pdf-parse": "^1.1.1",
     "autoprefixer": "^10.4.14",
     "aws-crt": "^1.15.15",
+    "clsx": "^1.2.1",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
+    "immer": "^10.0.1",
     "nalapa": "^1.11.0",
     "next": "13.3.0",
     "next-auth": "^4.22.1",
@@ -31,7 +34,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "redaxios": "^0.5.1",
-    "tailwindcss": "^3.3.1"
+    "tailwindcss": "^3.3.1",
+    "use-immer": "^0.9.0"
   },
   "devDependencies": {
     "@types/node": "18.15.11",

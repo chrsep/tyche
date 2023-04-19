@@ -1,32 +1,31 @@
-import { findInsuranceFile, loadInsuranceFile } from "../../../../lib/insurance"
-import { ID } from "../../../../lib/language"
+import { findInsuranceFile, loadInsuranceFile } from "$lib/insurance"
+import { ID } from "$lib/language"
 import ChatBox from "./chat-box"
+import { cache } from "react"
+
+const getInsuranceSentences = cache(async (id: string) => {
+  const insurance = await findInsuranceFile(id)
+  if (!insurance) return null
+
+  const file = await loadInsuranceFile(insurance)
+  return {
+    title: insurance.name,
+    text: file,
+  }
+})
 
 interface Props {
   params: { id: string }
 }
 
 async function Insurance(props: Props) {
-  const insurance = await findInsuranceFile(props.params.id)
+  const result = await getInsuranceSentences(props.params.id)
 
-  if (!insurance) return <div>Insurance not found</div>
-
-  const file = await loadInsuranceFile(insurance)
-  const sentences = await ID.splitSentence(file).splice(0, 20)
+  if (result === null) return <div>Insurance not found</div>
 
   return (
-    <div className={"p-8 flex gap-16 bg-gray-100 w-full"}>
-      <div className={"prose !max-w-sm flex-shrink-0"}>
-        <h1>{insurance.name}</h1>
-
-        <div>
-          {sentences.map((s) => (
-            <p key={s}>{s}</p>
-          ))}
-        </div>
-      </div>
-
-      <ChatBox sentences={sentences} />
+    <div className={"flex gap-16 bg-gray-100 w-full h-full"}>
+      <ChatBox title={result.title} text={result.text} />
     </div>
   )
 }

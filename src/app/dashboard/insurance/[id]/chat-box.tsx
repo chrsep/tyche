@@ -1,46 +1,118 @@
 "use client"
 
 import { useState } from "react"
-import { aws } from "@aws-sdk/util-endpoints/dist-types/lib"
-import { postInsuranceSummarize } from "../../../../lib/api"
+import { useImmer } from "use-immer"
+import clsx from "clsx"
 
 interface Props {
-  sentences: string[]
+  title: string
+  text: string
 }
 
-export default function ChatBox({ sentences }: Props) {
-  const [index, setIndex] = useState(0)
-  const [currentSummary, setCurrentSummary] = useState("")
+export default function ChatBox({ title, text }: Props) {
+  const [messages, setMessages] = useImmer<
+    Array<{
+      role: "user" | "assistant"
+      message: string
+    }>
+  >([])
 
-  const handleSummarize = async () => {
-    const lastParagraph =
-      index > 0 ? sentences[index - 1] : "You haven't read anything yet."
-    const result = await postInsuranceSummarize(
-      currentSummary,
-      lastParagraph,
-      sentences[index]
-    )
+  return (
+    <div className={"w-full h-full bg-gray-100"}>
+      <h1 className={"mb-6 font-bold p-6 border-b bg-white"}>{title}</h1>
 
-    setCurrentSummary(result.summary)
-    setIndex(index + 1)
+      <div className={"px-3"}>
+        {messages.map((m) => (
+          <p
+            key={m.message}
+            className={clsx(
+              m.role === "user" &&
+                "mb-4 bg-blue-600 text-white rounded-lg p-3 mr-16 sm:mr-auto max-w-md",
+              m.role === "assistant" &&
+                "mb-4 bg-green-600 text-white rounded-lg p-3 ml-16 sm:ml-auto max-w-md"
+            )}
+          >
+            {m.message}
+          </p>
+        ))}
+
+        <MessageBox
+          onSubmit={(message) => {
+            setMessages((draft) => {
+              draft.push({
+                role: "user",
+                message,
+              })
+            })
+          }}
+        />
+      </div>
+    </div>
+  )
+}
+
+function MessageBox(props: { onSubmit: (text: string) => void }) {
+  const [message, setMessage] = useState("")
+
+  const handleSubmit = () => {
+    props.onSubmit(message)
+    setMessage("")
   }
 
   return (
-    <div className={"p-6 bg-white border rounded-xl flex-1 prose"}>
-      <h2>Summarize</h2>
+    <div className="flex items-start space-x-4 w-full">
+      <div className="flex-shrink-0">
+        <img
+          className="inline-block h-10 w-10 rounded-full"
+          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          alt=""
+        />
+      </div>
+      <div className="min-w-0 flex-1">
+        <form
+          action="#"
+          className="relative"
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit()
+          }}
+        >
+          <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600 bg-white">
+            <label htmlFor="comment" className="sr-only">
+              Add your comment
+            </label>
+            <textarea
+              rows={3}
+              name="comment"
+              id="comment"
+              className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+              placeholder="Add your comment..."
+              defaultValue={""}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
 
-      <h3>Current Paragraph</h3>
-      <p>{sentences[index]}</p>
+            {/* Spacer element to match the height of the toolbar */}
+            <div className="py-2" aria-hidden="true">
+              {/* Matches height of button in toolbar (1px border + 36px content height) */}
+              <div className="py-px">
+                <div className="h-9" />
+              </div>
+            </div>
+          </div>
 
-      <h3>Current Summary</h3>
-      <p>{currentSummary}</p>
-
-      <button
-        className={"border p-3 bg-gray-100 mt-8 rounded shadow"}
-        onClick={handleSummarize}
-      >
-        Summarize sentence number {index + 1}
-      </button>
+          <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
+            <div className="flex-shrink-0 ml-auto">
+              <button
+                type="submit"
+                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Post
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }
