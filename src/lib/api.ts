@@ -35,3 +35,20 @@ export async function postInsuranceSummarize(
   })
   return response.data
 }
+
+export async function postInsuranceChat(
+  id: string,
+  messages: Array<{
+    role: "user" | "assistant"
+    content: string
+  }>
+) {
+  const response = await axios.post<{
+    summary: string
+    choices: CreateChatCompletionResponseChoicesInner[]
+  }>("/insurance/chat", {
+    id,
+    messages,
+  })
+  return response.data
+}

@@ -25,7 +25,7 @@ async function Insurance(props: Props) {
 
   return (
     <div className={"flex gap-16 bg-gray-100 w-full h-full"}>
-      <ChatBox title={result.title} text={result.text} />
+      <ChatBox id={props.params.id} title={result.title} text={result.text} />
     </div>
   )
 }

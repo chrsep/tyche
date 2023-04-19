@@ -63,3 +63,35 @@ export const summarize = async (
 
   return data.choices
 }
+
+export const interviewInsurance = async (
+  insurance: string,
+  userName: string,
+  messages: Array<{
+    role: "user" | "assistant"
+    content: string
+  }>
+) => {
+  const { data } = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content: `
+          Your name is Stephanie. You are a insurance policy manager. your job 
+          is to read an Indonesian insurance policy and explain its content and 
+          repercussion to your customers. You speak in Bahasa Indonesia, you use 
+          modern slang such as "Gw" and "Lu". You like to speak casually like a teenager. 
+          I'm your first customer, my name is ${userName}.
+        `,
+      },
+      // {
+      //   role: "user",
+      //   content: `You will be basing your answers according to the following insurance policy file: ${insurance}`,
+      // },
+      ...messages,
+    ],
+  })
+
+  return data.choices
+}

@@ -3,17 +3,20 @@
 import { useState } from "react"
 import { useImmer } from "use-immer"
 import clsx from "clsx"
+import { postInsuranceChat } from "$lib/api"
 
 interface Props {
+  id: string
   title: string
   text: string
 }
 
-export default function ChatBox({ title, text }: Props) {
+export default function ChatBox({ title, text, id }: Props) {
+  const [isLoading, setIsLoading] = useState(false)
   const [messages, setMessages] = useImmer<
     Array<{
       role: "user" | "assistant"
-      message: string
+      content: string
     }>
   >([])
 
@@ -24,7 +27,7 @@ export default function ChatBox({ title, text }: Props) {
       <div className={"px-3"}>
         {messages.map((m) => (
           <p
-            key={m.message}
+            key={m.content}
             className={clsx(
               m.role === "user" &&
                 "mb-4 bg-blue-600 text-white rounded-lg p-3 mr-16 sm:mr-auto max-w-md",
@@ -32,16 +35,41 @@ export default function ChatBox({ title, text }: Props) {
                 "mb-4 bg-green-600 text-white rounded-lg p-3 ml-16 sm:ml-auto max-w-md"
             )}
           >
-            {m.message}
+            {m.content}
           </p>
         ))}
 
+        {isLoading && (
+          <p
+            className={clsx(
+              "mb-4 bg-green-600 text-white/70 rounded-lg p-3 ml-16 sm:ml-auto max-w-md animate-pulse"
+            )}
+          >
+            Bot is typing...
+          </p>
+        )}
+
         <MessageBox
-          onSubmit={(message) => {
+          onSubmit={async (content) => {
             setMessages((draft) => {
               draft.push({
                 role: "user",
-                message,
+                content,
+              })
+            })
+            setIsLoading(true)
+            const response = await postInsuranceChat(id, [
+              ...messages,
+              {
+                role: "user",
+                content,
+              },
+            ])
+            setIsLoading(false)
+            setMessages((draft) => {
+              draft.push({
+                role: "assistant",
+                content: response.summary,
               })
             })
           }}
