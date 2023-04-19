@@ -1,5 +1,9 @@
+// @ts-ignore
+import pdf from "pdf-parse/lib/pdf-parse"
 import prisma from "$lib/prisma"
 import { randomUUID } from "crypto"
+import { InsuranceFile } from "@prisma/client"
+import { getFile } from "$lib/file-storage"
 
 export async function findInsuranceFiles(email: string) {
   await prisma.$connect()
@@ -35,4 +39,23 @@ export async function deleteInsuranceFile(id: string) {
       id: id,
     },
   })
+}
+
+export async function findInsuranceFile(id: string) {
+  await prisma.$connect()
+  return prisma.insuranceFile.findUnique({
+    where: { id: id },
+  })
+}
+
+export async function loadInsuranceFile(metadata: InsuranceFile) {
+  const file = await getFile(metadata.objectKey)
+
+  const byteStream = await file.Body?.transformToByteArray()
+  if (!byteStream) {
+    throw new Error("No file found")
+  }
+  const result = await pdf(Buffer.from(byteStream))
+
+  return result.text
 }

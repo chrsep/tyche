@@ -29,7 +29,7 @@ async function InsuranceList() {
       {files.map((f) => {
         return (
           <li key={f.id}>
-            <Link href={`/insurance/${f.id}`}>{f.name}</Link>
+            <Link href={`/dashboard/insurance/${f.id}`}>{f.name}</Link>
           </li>
         )
       })}
