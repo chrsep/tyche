@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { saveUser } from "$lib/user"
+import { saveUser } from "../../../lib/user"
 
 export const authOptions: AuthOptions = {
   pages: {

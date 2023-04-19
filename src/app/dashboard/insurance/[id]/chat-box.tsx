@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { aws } from "@aws-sdk/util-endpoints/dist-types/lib"
-import { postInsuranceSummarize } from "$lib/api"
+import { postInsuranceSummarize } from "../../../../lib/api"
 
 interface Props {
   sentences: string[]

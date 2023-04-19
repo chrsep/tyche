@@ -1,5 +1,5 @@
-import { findInsuranceFile, loadInsuranceFile } from "$lib/insurance"
-import { ID } from "$lib/language"
+import { findInsuranceFile, loadInsuranceFile } from "../../../../lib/insurance"
+import { ID } from "../../../../lib/language"
 import ChatBox from "./chat-box"
 
 interface Props {

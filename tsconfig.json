@@ -24,20 +24,20 @@
     ],
     "paths": {
       "$styles/*": [
-        "./styles/*"
+        "./src/styles/*"
       ],
       "$components/*": [
-        "./components/*"
+        "./src/components/*"
       ],
       "$hooks/*": [
-        "./hooks/*"
+        "./src/hooks/*"
       ],
       "$pages/*": [
-        "./pages/*"
+        "./src/pages/*"
       ],
       "$lib/*": [
-        "./lib/*"
-      ],
+        "./src/lib/*"
+      ]
     }
   },
   "include": [

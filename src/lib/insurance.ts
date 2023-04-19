@@ -1,9 +1,9 @@
 // @ts-ignore
 import pdf from "pdf-parse/lib/pdf-parse"
-import prisma from "$lib/prisma"
+import prisma from "./prisma"
 import { randomUUID } from "crypto"
 import { InsuranceFile } from "@prisma/client"
-import { getFile } from "$lib/file-storage"
+import { getFile } from "./file-storage"
 
 export async function findInsuranceFiles(email: string) {
   await prisma.$connect()

@@ -1,5 +1,5 @@
 "use client"
-import { axios, uploadInsuranceFile, uploadS3File } from "$lib/api"
+import { axios, uploadInsuranceFile, uploadS3File } from "../../lib/api"
 import { ChangeEventHandler } from "react"
 import { useRouter } from "next/navigation";
 
