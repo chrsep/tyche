@@ -20,19 +20,11 @@ export async function uploadS3File(uploadURL: string, file: File) {
   return response.data
 }
 
-export async function postInsuranceSummarize(
-  currentSummary: string,
-  lastParagraph: string,
-  currentParagraph: string
-) {
+export async function postInsuranceSummarize(chapter: string) {
   const response = await axios.post<{
     summary: string
     choices: CreateChatCompletionResponseChoicesInner[]
-  }>("/insurance/summarize", {
-    currentSummary,
-    lastParagraph,
-    currentParagraph,
-  })
+  }>("/insurance/summarize", { chapter })
   return response.data
 }
 

@@ -24,9 +24,7 @@ async function Insurance(props: Props) {
   if (result === null) return <div>Insurance not found</div>
 
   return (
-    <div className={"flex gap-16 bg-gray-100 w-full h-full"}>
-      <ChatBox id={props.params.id} title={result.title} text={result.text} />
-    </div>
+    <ChatBox id={props.params.id} title={result.title} text={result.text} />
   )
 }
 

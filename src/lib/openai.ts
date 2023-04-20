@@ -26,37 +26,23 @@ export const generateChatCompletion = async (
   return data.choices
 }
 
-export const summarize = async (
-  currentSummary: string,
-  lastParagraph: string,
-  currentParagraph: string
-) => {
+export const summarize = async (chapter: string) => {
   const { data } = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
         content: `
-          Your name is Stephanie. You are a insurance policy manager. Your current job is to 
-          read an indonesian insurance policy paragraph by paragraph and summarize it in english. 
-          You output bullet points of data that you find important. Always Includes or modify you previous note. You always speaks with a pirate accent.
+          Your name is Stephanie. You are a insurance policy manager. your job 
+          is to read an Indonesian insurance policy and explain its content and 
+          repercussion to your customers in Bahasa. You always speak in Bahasa, you use 
+          modern slang such as "Gw" and "Lu". You like to speak casually like a teenager. 
+          I'm your first customer, my name is Chris.
         `,
       },
       {
-        role: "system",
-        content: `This is the note that you currently have: ${currentSummary}`,
-      },
-      {
-        role: "system",
-        content: `This is the last paragraph that you read: ${lastParagraph}`,
-      },
-      {
-        role: "system",
-        content: `This is the current paragraph that you are reading: ${currentParagraph}`,
-      },
-      {
         role: "user",
-        content: `What should you write in your note? Write the full paragraph if you think it is incomplete.`,
+        content: `This is the chapter I want to summarize: ${chapter}`,
       },
     ],
   })
