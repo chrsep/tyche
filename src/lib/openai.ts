@@ -1,4 +1,5 @@
-import { Configuration, OpenAIApi } from "openai"
+import { Configuration, OpenAIApi } from "openai-edge"
+import { CreateChatCompletionResponse } from "openai"
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_SECRET_KEY,
@@ -11,7 +12,7 @@ export const generateChatCompletion = async (
     content: string
   }>
 ) => {
-  const { data } = await openai.createChatCompletion({
+  const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
       {
@@ -23,11 +24,13 @@ export const generateChatCompletion = async (
     ],
   })
 
+  const data = await response.json()
+
   return data.choices
 }
 
 export const summarize = async (chapter: string) => {
-  const { data } = await openai.createChatCompletion({
+  const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
       {
@@ -47,6 +50,8 @@ export const summarize = async (chapter: string) => {
     ],
   })
 
+  const data: CreateChatCompletionResponse = await response.json()
+
   return data.choices
 }
 
@@ -57,7 +62,7 @@ export const chat = async (
     content: string
   }>
 ) => {
-  const { data } = await openai.createChatCompletion({
+  const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
       {
@@ -73,6 +78,8 @@ export const chat = async (
       ...messages,
     ],
   })
+
+  const data: CreateChatCompletionResponse = await response.json()
 
   return data.choices
 }
