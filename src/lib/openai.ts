@@ -64,8 +64,7 @@ export const summarize = async (
   return data.choices
 }
 
-export const interviewInsurance = async (
-  insurance: string,
+export const chat = async (
   userName: string,
   messages: Array<{
     role: "user" | "assistant"
@@ -85,10 +84,6 @@ export const interviewInsurance = async (
           I'm your first customer, my name is ${userName}.
         `,
       },
-      // {
-      //   role: "user",
-      //   content: `You will be basing your answers according to the following insurance policy file: ${insurance}`,
-      // },
       ...messages,
     ],
   })
