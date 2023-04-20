@@ -20,9 +20,18 @@ export default function ChatBox({ title, text, id }: Props) {
     }>
   >([])
 
+  const textByChapter = text.split("BAB ")
+  const titles = textByChapter.map((t) => t.split("Pasal")[0]).slice(1)
+
+  console.log(titles)
+
   return (
     <div className={"w-full h-full bg-gray-100"}>
       <h1 className={"mb-6 font-bold p-6 border-b bg-white"}>{title}</h1>
+
+      {/*{titles.map((t) => {*/}
+      {/*  return <p key={t} className={"px-6 py-3 border-b"}>{t}</p>*/}
+      {/*})}*/}
 
       <div className={"px-3"}>
         {messages.map((m) => (
@@ -115,7 +124,6 @@ function MessageBox(props: { onSubmit: (text: string) => void }) {
               id="comment"
               className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               placeholder="Add your comment..."
-              defaultValue={""}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />

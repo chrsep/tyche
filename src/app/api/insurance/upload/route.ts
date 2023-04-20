@@ -1,9 +1,9 @@
-import { authOptions } from "../../../../pages/api/auth/[...nextauth]"
+import { authOptions } from "$pages/api/auth/[...nextauth]"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
-import { findUserByEmail } from "../../../../lib/user"
-import { generateFileUploadURL } from "../../../../lib/file-storage"
-import { saveInsuranceFile } from "../../../../lib/insurance"
+import { findUserByEmail } from "$lib/user"
+import { generateFileUploadURL } from "$lib/file-storage"
+import { saveInsuranceFile } from "$lib/db"
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions)

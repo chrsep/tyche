@@ -1,7 +1,7 @@
-import { findInsuranceFile, loadInsuranceFile } from "$lib/insurance"
-import { ID } from "$lib/language"
 import ChatBox from "./chat-box"
 import { cache } from "react"
+import { findInsuranceFile } from "$lib/db"
+import { loadInsuranceFile } from "$lib/insurance"
 
 const getInsuranceSentences = cache(async (id: string) => {
   const insurance = await findInsuranceFile(id)

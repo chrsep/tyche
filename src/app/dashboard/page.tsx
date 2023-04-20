@@ -1,8 +1,8 @@
 import FileUpload from "./file-upload"
-import { findInsuranceFiles } from "$lib/insurance"
 import { getServerSession } from "next-auth"
 import { authOptions } from "$pages/api/auth/[...nextauth]"
 import Link from "next/link"
+import { findInsuranceFiles } from "$lib/db";
 
 export default async function Home() {
   return (

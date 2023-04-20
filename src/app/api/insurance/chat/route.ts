@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { interviewInsurance, summarize } from "$lib/openai"
-import { findInsuranceFile } from "$lib/insurance"
+import { interviewInsurance } from "$lib/openai"
 import { getServerSession } from "next-auth"
 import { authOptions } from "$pages/api/auth/[...nextauth]"
+import { findInsuranceFile } from "$lib/db"
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions)
