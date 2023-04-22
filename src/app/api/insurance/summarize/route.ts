@@ -15,5 +15,3 @@ export async function POST(request: Request) {
     console.log(e)
   }
 }
-
-export const runtime = "edge"

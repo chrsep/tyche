@@ -1,5 +1,4 @@
-import { Configuration, OpenAIApi } from "openai-edge"
-import { CreateChatCompletionResponse } from "openai"
+import { Configuration, CreateChatCompletionResponse, OpenAIApi } from "openai"
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_SECRET_KEY,
@@ -24,9 +23,7 @@ export const generateChatCompletion = async (
     ],
   })
 
-  const data = await response.json()
-
-  return data.choices
+  return response.data.choices
 }
 
 export const summarize = async (chapter: string) => {
@@ -50,9 +47,7 @@ export const summarize = async (chapter: string) => {
     ],
   })
 
-  const data: CreateChatCompletionResponse = await response.json()
-
-  return data.choices
+  return response.data.choices
 }
 
 export const chat = async (
@@ -79,7 +74,14 @@ export const chat = async (
     ],
   })
 
-  const data: CreateChatCompletionResponse = await response.json()
+  return response.data.choices
+}
 
-  return data.choices
+export const bulkCreateEmbedding = async (input: string[]) => {
+  const response = await openai.createEmbedding({
+    model: "text-embedding-ada-002",
+    input,
+  })
+
+  return response.data.data
 }

@@ -2,8 +2,10 @@ import { authOptions } from "$pages/api/auth/[...nextauth]"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { findUserByEmail } from "$lib/user"
-import { generateFileUploadURL, uploadFile } from "$lib/file-storage"
-import { saveInsuranceFile } from "$lib/db"
+// @ts-ignore
+import pdf from "pdf-parse/lib/pdf-parse"
+import { ID } from "$lib/language"
+import { bulkCreateEmbedding } from "$lib/openai"
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions)
@@ -26,8 +28,24 @@ export async function POST(request: Request) {
     })
   }
 
-  const insuranceFile = await saveInsuranceFile(user.id, type, name)
-  await uploadFile(insuranceFile.objectKey, file)
+  const buffer = await file.arrayBuffer()
+  const pdfText = await pdf(buffer)
+
+  const bab = pdfText.text.split("BAB").map((c: string) => {
+    const title = c.split("\n")[0] + " " + c.split("\n")[1]
+
+    const pasal = c.split("Pasal")
+
+    return {
+      title,
+      pasal,
+    }
+  })
+  const sentences = ID.splitSentence(pdfText.text)
+  const embeddings = await bulkCreateEmbedding(sentences)
+
+  // await uploadFile(insuranceFile.objectKey, file)
+  // await updateInsuranceFileContent(insuranceFile.id, pdfText.text)
 
   // const uploadURL = await generateFileUploadURL(
   //   insuranceFile.objectKey,
