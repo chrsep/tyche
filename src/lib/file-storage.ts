@@ -34,3 +34,11 @@ export async function getFile(key: string) {
     })
   )
 }
+
+export async function uploadFile(key: string, file: File) {
+  const response = await fetch(await generateFileUploadURL(key, file.type), {
+    method: "PUT",
+    body: file,
+  })
+  return response
+}

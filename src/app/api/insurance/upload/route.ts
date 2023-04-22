@@ -2,7 +2,7 @@ import { authOptions } from "$pages/api/auth/[...nextauth]"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { findUserByEmail } from "$lib/user"
-import { generateFileUploadURL } from "$lib/file-storage"
+import { generateFileUploadURL, uploadFile } from "$lib/file-storage"
 import { saveInsuranceFile } from "$lib/db"
 
 export async function POST(request: Request) {
@@ -15,14 +15,26 @@ export async function POST(request: Request) {
     return NextResponse.redirect("/auth/login")
   }
 
-  const body = await request.json()
+  const body = await request.formData()
+  const file = (await body.get("file")) as File | null
+  const name = (await body.get("name")) as string | null
+  const type = (await body.get("type")) as string | null
 
-  const insuranceFile = await saveInsuranceFile(user.id, body.type, body.name)
+  if (!file || !name || !type) {
+    return NextResponse.json({
+      success: false,
+    })
+  }
 
-  const uploadURL = await generateFileUploadURL(
-    insuranceFile.objectKey,
-    body.type
-  )
+  const insuranceFile = await saveInsuranceFile(user.id, type, name)
+  await uploadFile(insuranceFile.objectKey, file)
 
-  return NextResponse.json({ uploadURL: uploadURL })
+  // const uploadURL = await generateFileUploadURL(
+  //   insuranceFile.objectKey,
+  //   body.type
+  // )
+
+  return NextResponse.json({
+    success: true,
+  })
 }

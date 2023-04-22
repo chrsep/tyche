@@ -6,12 +6,14 @@ export const axios = redaxios.create({
 })
 
 export async function uploadInsuranceFile(file: File) {
+  const formData = new FormData()
+  formData.append("file", file)
+  formData.append("name", file.name)
+  formData.append("type", file.type)
+
   const response = await axios.post<{
     uploadURL: string
-  }>("/insurance/upload", {
-    type: file.type,
-    name: file.name,
-  })
+  }>("/insurance/upload", formData)
   return response.data
 }
 

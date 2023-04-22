@@ -1,7 +1,7 @@
 "use client"
-import { axios, uploadInsuranceFile, uploadS3File } from "../../lib/api"
+import { uploadInsuranceFile } from "$lib/api"
 import { ChangeEventHandler } from "react"
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"
 
 export default function FileUpload() {
   const router = useRouter()
@@ -10,8 +10,7 @@ export default function FileUpload() {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const result = await uploadInsuranceFile(file)
-    await uploadS3File(result.uploadURL, file)
+    await uploadInsuranceFile(file)
     router.refresh()
   }
 
